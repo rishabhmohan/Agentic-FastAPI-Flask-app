@@ -1,27 +1,20 @@
-from flask import Flask, render_template, request, jsonify
-import requests
-
-app = Flask(__name__)
-
-
-@app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
-        topic = request.form.get("topic")
-        temperature = float(request.form.get("temperature"))
-
-        response = requests.post("http://localhost:8000/generate_report/",
-                                 json={"topic": topic, "temperature": temperature})
-
-        if response.status_code == 200:
-            report = response.json().get("report")
-            return render_template("index.html", report=report, topic=topic)
-        else:
-            error = response.json().get("detail")
-            return render_template("index.html", error=error)
-
-    return render_template("index.html")
-
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Service</title>
+</head>
+<body>
+    <h1>Welcome to the FastAPI Prediction Service</h1>
+    <form action="/predict/" method="post">
+        <label for="feature1">Feature 1:</label>
+        <input type="number" step="any" id="feature1" name="feature1" required><br><br>
+        <label for="feature2">Feature 2:</label>
+        <input type="number" step="any" id="feature2" name="feature2" required><br><br>
+        <label for="feature3">Feature 3:</label>
+        <input type="number" step="any" id="feature3" name="feature3" required><br><br>
+        <label for="feature4">Feature 4:</label>
+        <input type="number" step="any" id="feature4" name="feature4" required><br><br>
+        <button type="submit">Predict</button>
+    </form>
+</body>
+</html>
